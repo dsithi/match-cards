@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Bubblegum&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap" rel="stylesheet">
+    <title>Join Game Room</title>
+</head>
+<body>
+    <div class="join-container">
+        <div class="top">
+            <h1 class="join-title">Match Cards</h1>
+        </div>
+        <div class="top-left">
+            <form>
+                <p id="name">Player Name</p>
+                <label for="username"></label>
+                <input 
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter name"
+                    required
+                    autocomplete="off"
+                    maxlength="15"
+                >
+                <button class="btn" id="set" onclick="return changeName('username')">Set</button>
+            </form>
+        </div>
+
+        <div class="top-right">
+            <h2>Choose an Avatar</h2>
+            <div class="avatar-container">
+                <img class="avatar" id="currentImg" src="Assets/images/sprites/bear-1.png">
+            </div>
+            <div class="select-img">
+                <button class="btn" id="select">Select</button>
+            </div>
+            <div class="popup-avatar" id="avatars" style="display: none;">
+                <div class="img-container">
+                    <img  class="sprite" id="img1" src="Assets/images/sprites/bear-1.png" onclick="selectImg(id);">
+                    <img  class="sprite" id="img2" src="Assets/images/sprites/bear-2.png" onclick="selectImg(id);">
+                    <img  class="sprite" id="img3" src="Assets/images/sprites/cook-1.png" onclick="selectImg(id);">
+                    <img  class="sprite" id="img4" src="Assets/images/sprites/cook-2.png" onclick="selectImg(id);">
+                    <img  class="sprite" id="img5" src="Assets/images/sprites/ghost-1.png" onclick="selectImg(id);">
+                    <img  class="sprite" id="img6" src="Assets/images/sprites/ghost-2.png" onclick="selectImg(id);">
+                </div>
+                <button type="button" class="close-btn" id="close-img">X</button>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <h1 id="title">Available Rooms</h1>
+            <ul class="room-list" id="room1" data="room-1" onclick="selectRoom(id, 'room-1');">
+                <p class="room" id="room-1">Room 1</p>
+                <p class="room-capacity">1/4</p>
+            </ul>
+            <ul class="room-list" id="room2" data="room-2" onclick="selectRoom(id, 'room-2');">
+                <p class="room" id="room-2">Room Zoom</p>
+                <p class="room-capacity">3/4</p>
+            </ul>
+            
+            <div class="buttons">
+                <button class="btn" id="create">Add</button>
+                <button class="btn" id="join">Join</button>
+            </div>
+        </div>
+
+        <!-- Create Room Popup Form -->
+        <div id="overlay" style="display: none;">
+            <div class="popup-form">
+                <form class="form-container" id="room-form"
+                    style="display: none;">
+                    <button type="button" class="close-btn" id="close">X</button>
+                    <label for="new-room">Create New Room</label>
+                    <input type="text"
+                           placeholder="Enter Room Name.."
+                           id="room-name"
+                           required
+                           autocomplete="off"
+                           >
+                    <button type="submit" class="btn" id="create-btn">Create Room</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+<script>
+    // Change player name
+    function changeName(id) {
+        let playerName = document.getElementById('name');
+        playerName.innerHTML = document.getElementById(id).value;
+        document.getElementById('username').value = "";
+        document.getElementById('username').blur();
+        return false;
+    }
+
+    // Popup Avatar Selection 
+    const selectPopup = document.getElementById('select');
+    const imageBox = document.getElementById('avatars');
+    selectPopup.addEventListener('click', () =>{
+        if(imageBox.style.display === "none") {
+            imageBox.style.display = "block";
+        }
+        else {
+            imageBox.style.display = "none";
+        }
+    });
+    document.getElementById('close-img').addEventListener('click', () => {
+        imageBox.style.display = "none";
+    });
+
+    // Select Image.. defauly 1st image
+    document.getElementById('currentImg').src = 'Assets/images/sprites/bear-1.png';
+    let currentImage = document.getElementById('img1');
+    currentImage.style.backgroundColor = "#C5FFC2"; //green
+    // Keep track of the image ID that is currently selected
+    function selectImg(id) {
+            currentImage.style.backgroundColor = "#E2E9D8";
+            currentImage = document.getElementById(id);
+            currentImage.style.backgroundColor = "#C5FFC2";
+            document.getElementById('currentImg').src = currentImage.src; 
+            imageBox.style.display = "none";
+    }
+
+    // Popup Room Form
+    const createPopup = document.getElementById('create');
+    const roomForm = document.getElementById('room-form');
+    const overlay = document.getElementById('overlay');
+    createPopup.addEventListener('click', () => {
+        if(roomForm.style.display === "none"){
+            roomForm.style.display = "block";
+            overlay.style.display = "block";
+            imageBox.style.display = "none";
+        }
+        else {
+            roomForm.style.display = "none";
+        }
+    });
+    document.getElementById('close').addEventListener('click', () => {
+        overlay.style.display = "none";
+        roomForm.style.display = "none";
+    });
+
+    document.onkeydown = ((e) => {
+        e = window.event;
+        if (e.keyCode == 27) {
+            if (roomForm.style.display === 'block') {
+                overlay.style.display = "none";
+                roomForm.style.display = "none";
+            }
+        }
+    });
+
+    // Rooms list
+    let roomNum; // make sure 4 or less?
+    
+        // Be able to click one room at a time and focus
+        // Join Button disabled until clicked
+    let roomSelected = false;
+    let currentRoom; // Pass in current room id/value? when Joining room
+    let roomId;
+    function selectRoom(room, id) {
+        const rooms = document.querySelectorAll('.room-list');
+        // No currently selected room
+        if (currentRoom == null) {
+            currentRoom = document.getElementById(room);
+            currentRoom.style.backgroundColor = "#C5FFC2";
+            roomSelected = true;
+            roomId = id;
+        }
+        // Another room is selected
+        else if(currentRoom.id != room) {
+            // Set previous current room to default color
+            currentRoom.style.backgroundColor = "#E2E9D8";
+            // Set current room
+            currentRoom = document.getElementById(room);
+            //Change color
+            currentRoom.style.backgroundColor = "#C5FFC2";
+            roomSelected = true;
+            roomId = id;
+        }
+    }
+    // Pass in data to URL on Join
+    const joinRoom = document.getElementById('join');
+    const username = document.getElementById('name');
+    joinRoom.addEventListener('click', () => {
+        // Check if room selected
+        if (roomSelected) {
+            // Pass in username, room name, image source
+            // Check if people in room less than = 4?
+            console.log(username.innerHTML);
+            console.log(document.getElementById(roomId).innerHTML);
+            console.log(currentImage.src);
+            window.document.location = 
+            `./game_room.html?username=${username.innerHTML}&room=${document.getElementById(roomId).innerHTML}&img=${currentImage.src}`;
+        }
+        else {
+            alert('Select room');
+        }
+    });
+
+
+</script>
+
+</html>
