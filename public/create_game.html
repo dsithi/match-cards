@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Bubblegum&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap" rel="stylesheet">
+    <title>Create Game Room</title>
+</head>
+<body>
+    <div class="create-container">
+        <div class="top">
+            <h1 class="join-title">Match Cards</h1>
+        </div>
+        <div class="create-main">
+            <form action="game_room.html">
+                <p>Select Avatar</p>
+                <label>
+                    <input type="radio" name="src" value="050-worker.svg" checked>
+                    <img class="avatar" src="avatars\050-worker.svg">
+                </label>
+                <label>
+                    <input type="radio" name="src" value="046-woman.svg">
+                    <img class="avatar" src="avatars\046-woman.svg">
+                </label>
+                <label>
+                    <input type="radio" name="src" value="008-chef.svg">
+                    <img class="avatar" src="avatars\008-chef.svg">
+                </label>
+                <label>
+                    <input type="radio"name="src" value="041-spy.svg">
+                    <img class="avatar" src="avatars\041-spy.svg">
+                </label>
+                <label>
+                    <input type="radio" name="src" value="040-soldier.svg">
+                    <img class="avatar" src="avatars\040-soldier.svg">
+                </label>
+                <label>
+                    <input type="radio"name="src" value="039-skater.svg">
+                    <img class="avatar" src="avatars\039-skater.svg">
+                </label>
+                <label>
+                    <input type="radio" name="src" value="020-girl.svg">
+                    <img class="avatar" src="avatars\020-girl.svg">
+                </label>
+                <label>
+                    <input type="radio" name="src" value="010-chef.svg">
+                    <img class="avatar" src="avatars\010-chef.svg">
+                </label>
+                <input 
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter Name"
+                    required
+                    autocomplete="off"
+                    maxlength="8"
+                >
+                <button type="submit" class="index-button">Create!</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -9,42 +9,22 @@
     <title>Join Game Room</title>
 </head>
 <body>
-    <div class="join-container">
+    <div class="index-container">
         <div class="top">
             <h1 class="join-title">Match Cards</h1>
         </div>
-        <div class="name-container">
-            <p class="text">Enter name and select a room to begin. Two players will play against each other to match cards. Whoever has the higher points is the winner.</p>
-            <form action="game_room.html">
-                <label for="username"></label>
-                <input 
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Enter name"
-                    required
-                    autocomplete="off"
-                    maxlength="8"
-                >
-                <h1 id="title">Available Rooms</h1>
-                <select name="rooms" id="rooms" size="5" required>
-                    <option value="room1">             
-                        <p class="room">Room 1</p>
-                    </option>
-                    <option value="room2">             
-                        <p class="room">Room 2</p>
-                    </option>
-                    <option value="room3">             
-                        <p class="room">Room 3</p>
-                    </option>
-                    <option value="room4">             
-                        <p class="room">Room 4</p>
-                    </option>
-                </select>     
-                <div class="buttons">
-                    <button type="submit" class="btn">Join</button>
-                </div>
-            </form>
+        <div class="index-main">
+            <p class="text"> Two players can play against each other to match the highest number of cards.
+                            Four players are allowed per room. To join a room you must have the game code.
+            </p>
+            <div class="index-button-container">
+                <form action="create_game.html">
+                    <button type="submit" class="index-button">Create Game</button>
+                </form>
+                <form action="join_game.html">
+                    <button type="submit" class="index-button">Join Game</button>
+                </form>
+            </div>
         </div>
     </div>
 </body>

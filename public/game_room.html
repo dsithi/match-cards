@@ -18,150 +18,100 @@
             <span class="time">Time 25</span>
             <span class="player-turn">[Player]'s Turn</span>
             <span class="title">Match Cards</span>
-            <span class="room-name">Room 1</span>
+            <span class="room-name" id="roomName">Room 1</span>
         </div>
          <!-- Card game -->
         <div class="game-container">
+            <div id="overlay" onclick="off()">
+                <div id="text">Time Here</div>
+              </div>
             <div class="game-box">
-                <div class="card" data-img="Gyudon">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Gyudon.png" draggable="false">
+                <div class="card" data-img="milk">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\milk.svg" draggable="false">
                 </div>
-                <div class="card" data-img="Gyudon">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Gyudon.png" draggable="false">
+                <div class="card" data-img="milk">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\milk.svg" draggable="false">
                 </div>
-                <div class="card" data-img="Miso">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Miso_Soup.png" draggable="false">
+                <div class="card" data-img="breakfast">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\breakfast.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Miso">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Miso_Soup.png" draggable="false">
+                <div class="card" data-img="breakfast">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\breakfast.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Narutomaki">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card"src="Assets/images/icons/Narutomaki.png" draggable="false">
+                <div class="card" data-img="pie">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\pie.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Narutomaki">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Narutomaki.png" draggable="false">
+                <div class="card" data-img="pie">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\pie.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Nigiri">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Nigiri_01.png" draggable="false">
+                <div class="card" data-img="rice">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\rice.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Nigiri">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Nigiri_01.png" draggable="false">
+                <div class="card" data-img="rice">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\rice.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Onigiri">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card"  src="Assets/images/icons/Onigiri.png" draggable="false">
+                <div class="card" data-img="steak">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\steak.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Onigiri">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Onigiri.png" draggable="false">
+                <div class="card" data-img="steak">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\steak.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Ramen">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Ramen.png" draggable="false">
+                <div class="card" data-img="watermelon">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\watermelon.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Ramen">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Ramen.png" draggable="false">
+                <div class="card" data-img="watermelon">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\watermelon.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Salmon">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Salmon_Roll.png" draggable="false">
+                <div class="card" data-img="chicken">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\chicken.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Salmon">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Salmon_Roll.png" draggable="false">
+                <div class="card" data-img="chicken">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\chicken.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Shrimp">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Shrimp_02.png" draggable="false">
+                <div class="card" data-img="burger">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\burger.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Shrimp">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Shrimp_02.png" draggable="false">
+                <div class="card" data-img="burger">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\burger.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Soy">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Soy_Sauce.png" draggable="false">
+                <div class="card" data-img="noodles">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\noodles.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Soy">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Soy_Sauce.png" draggable="false">
+                <div class="card" data-img="noodles">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\noodles.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Takoyaki">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Takoyaki.png" draggable="false">
+                <div class="card" data-img="sausage">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\sausage.svg" draggable="false">
                 </div>
-                <div class="card"data-img="Takoyaki">
-                    <img class="front-card" src="Assets/images/card/chef-hat.svg" draggable="false">
-                    <img class="back-card" src="Assets/images/icons/Takoyaki.png" draggable="false">
+                <div class="card" data-img="sausage">
+                    <img class="front-card" src="icons\chef-hat.svg" draggable="false">
+                    <img class="back-card" src="icons\sausage.svg" draggable="false">
                 </div>
             </div>
 
         </div>
          <!-- Player Info -->
         <div class="player-info">
-            <div class="info-grid">
-                <div class="info">
-                    <h3 id="player1-name">Player 1</h3>
-                    <p class="points">1000 PTS</p>
-                    <img class="image" id="p1" src="Assets/images/sprites/bear-1.png">
-                    <ul class="scores">
-                        <p class="score-value">W</p>
-                        <p class="num">1</p>
-                        <p class="score-value">L</p>
-                        <p class="num">1</p>
-                        <p class="score-value">T</p>
-                        <p class="num">1</p>
-                    </ul>
-                </div>
-                <div class="info">
-                    <h3 id="player2-name">Player 2</h3>
-                    <p class="points">500 PTS</p>
-                    <img class="image" id="p2" src="Assets/images/sprites/cook-1.png">
-                    <ul class="scores">
-                        <p class="score-value">W</p>
-                        <p class="num">1</p>
-                        <p class="score-value">L</p>
-                        <p class="num">3</p>
-                        <p class="score-value">T</p>
-                        <p class="num">1</p>
-                    </ul>
-                </div>
-                <div class="info">
-                    <h3 id="player2-name">Player 3</h3>
-                    <p class="points">500 PTS</p>
-                    <img class="image" id="p3" src="Assets/images/sprites/ghost-1.png">
-                    <ul class="scores">
-                        <p class="score-value">W</p>
-                        <p class="num">1</p>
-                        <p class="score-value">L</p>
-                        <p class="num">3</p>
-                        <p class="score-value">T</p>
-                        <p class="num">1</p>
-                    </ul>
-                </div>
-                <div class="info">
-                    <h3 id="player2-name">Player 4</h3>
-                    <p class="points">500 PTS</p>
-                    <img class="image" id="p4" src="Assets/images/sprites/bear-2.png">
-                    <ul class="scores">
-                        <p class="score-value">W</p>
-                        <p class="num">1</p>
-                        <p class="score-value">L</p>
-                        <p class="num">5</p>
-                        <p class="score-value">T</p>
-                        <p class="num">1</p>
-                    </ul>
-                </div>
-            </div>
+            <div class="info-grid"></div>
         </div>
         <div class="start-container">
             <button class="btns" id="rdy">Ready</button>
