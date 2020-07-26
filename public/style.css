@@ -6,11 +6,11 @@
 }
 
 html {
-    min-height: 100 vh;
+    min-height: 100vh;
 }
 
 body {
-    height: 100 vh;
+    height: 100vh;
     background-color: #FFFFFF;
 }
 
@@ -20,8 +20,9 @@ body {
     grid-auto-rows: 4em;
     border-radius: 3px;
     margin: 0 auto;
-    margin-top: 45px;
+    margin-top: 25px;
     width: 1400px;
+    min-width: 800px;
     box-shadow: 0 20px 50px rgba(59, 43, 91, 0.4);
 }
 
@@ -32,7 +33,7 @@ body {
     grid-row-start: 1;
     grid-row-end: 2;
     font-family: 'Montserrat Subrayada', sans-serif;
-    background-color: #2B7A78;
+    background-color: #3B7080;
     -webkit-text-stroke-width: 0.2px;
     border-top-left-radius: 9px;
     border-top-right-radius: 9px;
@@ -102,7 +103,7 @@ body {
 }
 /* Change background color on flip !!*/
 .card {
-    background-color: #3AAFA9;
+    background-color: #3B7080;
     border-radius: 5px;
     width: 145px;
     height: 175px;
@@ -148,6 +149,7 @@ body {
 /* Player Info */
 .player-info {
     background-color: #DEF2F1;
+    border: 2px;
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 2;
@@ -166,41 +168,37 @@ body {
     height: 100%;
     text-align: center;
     padding: 5px;
-    margin: 10px;
+    margin: 5px 10px;
+    
 }
 
 .info-grid img{
-    width: 120px;
-    height: 120px;
+    width: 125px;
+    height: 125px;
     display: inline-block;
-    margin-top: 7px;
-    border-radius: 45px;
-    padding: 10px;
-    border: 1px solid;
-    
+    margin-top: 8px;
+    border-radius: 5px;
+    padding: 0;
+    border: 2px solid;
 }
-
-#p1 {background-color: rgb(228, 198, 149);}
-#p2 {background-color: rgb(137, 112, 168);}
-#p3 {background-color: rgb(149, 175, 245);}
-#p4 {background-color: rgb(230, 141, 141);}
 
 .info-grid h3 {
     padding: 0;
-    background-color: #2B7A7B;
+    background-color: #336270;
     margin-bottom: 0;
     margin-top: 10px;
-    color: #DEF2F1;
+    color: white;
     height: 60px;
-    padding-top: 10px;
-    font-size: 2em;
-    
+    padding-top: 15px;
+    font-size: 1.6em;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: lighter;
 }
 
 .points {
     font-size: 1.3em;
     text-align: center;
-    background-color: #3AAFA9;
+    background-color: #47869A;
     color: #DEF2F1;
 }
 
@@ -208,13 +206,12 @@ body {
     width: 96%;
     height: 30%;
     font-size: 2em;
-    padding: 5px;
-    margin: 0px;
-    background-color: teal;
+    padding: 9px;
+    margin: 1px;
+    background-color: #336270;
     border: 1px solid;
     border-radius: 15px;
-    margin: 5px 0px;
-    color: #def2f1;
+    color: white;
 
 
 }
@@ -247,7 +244,9 @@ body {
     grid-column-end: 4;
     grid-row-start: 9;
     grid-row-end: 14;
-    font-family: 'Quicksand', sans-serif;
+    max-width: 568px;
+    
+    /*font-family: 'Libre Franklin', sans-serif; */
 }
 
 
@@ -260,50 +259,77 @@ li {
     flex-direction: column;
     border-radius: 6px;
     height: 100%;
-    min-width: 100%;
-    padding: 10px;
-    overflow-y: scroll;
-    background-color: #3aafa9;
-
+    max-height: 500px;
+    max-width: 568px;
+    padding: 4px;
+    background-color: #3A6E7E;
+    
 }
 
 .chat-box p {
-    font-size: 1.1em;
+    font-size: 2.1em;
 }
 
-.left-messages, .right-messages {
-    border-radius: 15px;
-    width: 55%;
-    padding: 10px 20px;
-    margin-bottom: 8px;
+.chat-box img {
+    width: 48px;
+    height: 45px;
+    border-radius: 60px;
+    margin-right: 1px;
+    padding: 2px;
+    margin-top: 2px;
+    margin-left: 5px;
+    margin-right: 9px;
 }
 
-.left-messages {
-    background-color: #99E5EA;
-    margin-top: 5px;
-    margin-left: 8px;
+.chat-messages {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    margin-bottom: 0px;
+    background-color: none;
+    overflow-y: scroll;
+    position: relative;
 }
 
-.right-messages {
-    background-color: #EDDDD4;
-    margin-left: auto;
-    margin-right: 8px;
+.img-msg {
+    display: flex;
+    flex-wrap: wrap;
+}
+.message {
+    background-color: honeydew;
+    border-radius: 3px;
+    padding: 10px 5px;
+    display: block;
+    max-width: auto;
+    height: 42px;
+    margin: 0;
+    margin-bottom: 9px;
+    margin-top: 6px;
+    overflow: hidden;
+    font-size: .6em;
 }
 
-.message-name-left, .message-name-right {
-    color: white;
-    font-size: .8em;   
+.msg-name {
+    font-size: 1em;
+    font-weight: lighter;
+    margin-right: -5px;
+    color: #ECEEE7;
+    font-family: 'Work Sans', sans-serif;
+    margin-right: 2px;
+    margin-left: 60px;
 }
 
-.message-name-left {
-    padding: 1px 25px;
+.msg-time {
+    font-size: .9em;
+    margin-right: 1px;
+    color: #BCF8EC;
+    font-family: 'Work Sans', sans-serif;
 }
 
-.message-name-right {
-    margin-left: auto;
-    padding: 2px 33px;
+.msg-text {
+    color: #2F2F2F;
+    font-family: 'Work Sans', sans-serif;
 }
-
 .chat-form-container {
     padding: 0 auto;
     max-height: 90px;
@@ -343,18 +369,19 @@ li {
     font-size: 1.5em;
     height: 55px;
     width: 50%;
-    background-color: #16252A;
+    background-color: #2A4465;
     border: 1px;
     color: #feffff;
     border-radius: 3px;
     font-family: 'Quicksand', sans-serif;
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-right: 5px;
     outline: none;
 }
 
 .btn:hover, .btns:hover {
     cursor: pointer;
-    background-color: #32464e;
+    background-color: #2A4465;
     color: #DEF2F1;
     transform: scale(1);
     transition: .31s ease-out;
@@ -363,7 +390,7 @@ li {
 .btns {
     height: 55px;
     width: 100px;
-    background-color: #16252A;
+    background-color: #2A4465;
     border: 1px;
     border-radius: 3px;
     font-family: 'Quicksand', sans-serif;
@@ -384,7 +411,7 @@ li {
     flex-wrap: nowrap;
 
     border-radius: 15px;
-    background-color: #2B7A78;
+    background-color: #336270;
     position: absolute;
     padding: 10px 15px;
 
@@ -460,7 +487,7 @@ li {
     display: inline-block;
     height: 75px;
     width: 220px;
-    background-color: #16252A;
+    background-color: #2A4465;
     border: 1px;
     border-radius: 3px;
     font-family: 'Quicksand', sans-serif;
@@ -472,8 +499,7 @@ li {
  }
 .index-button:hover {
     cursor: pointer;
-    background-color: #E7E5F1;
-    color: #3E7A57;
+    color: #d1d1d1;
     transform: scale(1);
     transition: .31s ease-out;
 }

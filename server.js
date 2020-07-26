@@ -3,6 +3,9 @@ const express = require('express');
 const http = require('http');
 const socket = require('socket.io');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./Utils/users.js');
+const formatMessage = require('./Utils/messages.js');
+const { format } = require('path');
+const BOT = { name: 'CAT BOT', src: 'animal.svg', color: 'orange' };
 
 // create express app, set port
 const app = express();
@@ -28,30 +31,50 @@ io.on('connection', socket => {
             // add user to array of users, assign random game id
             const {user} = addUser({ id: socket.id, name, roomID: null, src });
             socket.join(user.roomID);
-            console.log(`${user.name} has created a lobby. the room id is ${user.roomID}`); 
-            // send data to all the clients //
-            console.log(`Users in lobby: ${io.sockets.adapter.rooms[user.roomID].length}`)
+             // welcome user
+             io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color, 'Welcome to the chat!'));
+
+            // send data to all the clients in the room
+            io.to(user.roomID).emit('updateData', { 
+                users: getUsersInRoom(user.roomID)
+             });
+
         }
         // Check if roomID is stored and check if the room is full //
-        else if ( (io.sockets.adapter.rooms[roomID]) && (io.sockets.adapter.rooms[roomID].length <= 4)) { // user is joining room
+        else if ( (io.sockets.adapter.rooms[roomID]) && (io.sockets.adapter.rooms[roomID].length <= 3)) { // user is joining room
             const {user, error} = addUser({ id: socket.id, name, roomID: roomID, src });
             if (error) {
                 return callback(error);
             }
             if (user) {
                 socket.join(user.roomID);
-                console.log(`${user.name} has join a lobby. the room id is ${user.roomID}`); 
-                const users = getUsersInRoom(user.roomID);
+                io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color, 'Welcome to the chat!'));
+                // msg to all but connected user
+                socket.broadcast.to(user.roomID).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`${user.name} has joined`));
+                //const users = getUsersInRoom(user.roomID);
         
             }
             //console.log(io.sockets.adapter.rooms[roomID].length)
-            console.log(`Users in lobby: ${io.sockets.adapter.rooms[roomID].length}`)
+            //console.log(`Users in lobby: ${io.sockets.adapter.rooms[roomID].length}`)
+            // send data to all the clients in the room
+            io.to(user.roomID).emit('updateData', { 
+                users: getUsersInRoom(user.roomID)
+             });
         }
         else {
             callback(new Error('Invalid'))
         }
+    });
 
-
+    // Listen for chat message from client
+    socket.on('chatMessage', (msg) => {
+        // get the user data of who sent the message
+        const user = getUser(socket.id);
+        //console.log(user);
+        if (user) {
+            // format the message, send to all clients in room
+            io.to(user.roomID).emit('message', formatMessage(user.name, user.src, user.color, msg));
+        }
     });
 
 
@@ -61,7 +84,15 @@ io.on('connection', socket => {
 
     // user disconnect
     socket.on('disconnect', () => {
-    console.log('user has disconnected');
+        const user = removeUser(socket.id);
+        if (user) {
+            // msg to clients user left
+            io.to(user.roomID).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`${user.name} has left`));
+            // update user list
+            io.to(user.roomID).emit('updateData', { 
+                users: getUsersInRoom(user.roomID)
+             });
+        }
     });
 });
 

@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat+Subrayada:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@100&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans&display=swap" rel="stylesheet">
     <title>Match Cards</title>
 </head>
 <body>
@@ -18,7 +20,7 @@
             <span class="time">Time 25</span>
             <span class="player-turn">[Player]'s Turn</span>
             <span class="title">Match Cards</span>
-            <span class="room-name" id="roomName">Room 1</span>
+            <span class="room-name" id="roomName"></span>
         </div>
          <!-- Card game -->
         <div class="game-container">
@@ -122,22 +124,18 @@
         <!-- Chat -->
         <div class="chat-container">
             <div class="chat-box">
-                <ul class="left-messages">
-                    <p>Good afternoon.</p>
-                </ul>
-                <div class="message-name-left"><p>Nick, <span>12:22 PM</span></p></div>
-                <ul class="right-messages">
-                    <p>Hello there!</p>
-                </ul>
-                <div class="message-name-right"><p>Winston, <span>1:01 PM</span></p></div>
+                <div class="chat-messages">         
+                </div>
             </div>
             <div class="chat-form-container">
                 <form action="submit" id="chat-form">
-                    <input id="msg"
+                    <input 
+                        id="msg"
                         type="text"
                         placeholder="Type a message.."
                         required
                         autocomplete="off"
+                        maxlength="32"
                     />
                     <button class="btn" id="send">Send</button>
                 </form>
