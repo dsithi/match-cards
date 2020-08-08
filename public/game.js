@@ -34,66 +34,56 @@ function idleState() { /* Adjust for server/client .. return images?*/
 //              - countdown(resets), Call EndState when cards reach 0  
 let cardCount = 0;
 let firstCard, secondCard;
-function playState() {
+let canClick = true;
+let cardId = "";
+
+function playTurn() {
+    cardCount = 0;
     const card = document.querySelectorAll('.card');
     card.forEach(card => {
-        card.addEventListener('click', flipCard);
+        card.addEventListener('click', flipCard); 
     });
 }
 
+
 function flipCard() {
-    // Allow two flips per turn?
-    if(cardCount < 2) {
+    if (cardCount < 1) {
         this.classList.toggle('flipped', true);
-        cardCount++;
-        if (cardCount == 1){
-            // Set firstCard to first card clicked
-            firstCard = this;
-        }
-        if (cardCount == 2){
-            secondCard = this;
-            checkMatch();
-        }
-            
-    }
-}
-
-
-function checkMatch() {
-    if (firstCard.dataset.img === secondCard.dataset.img) {
-        console.log(`${firstCard.dataset.img} is equal to ${secondCard.dataset.img}`);
-        cardCount = 0;
-        // remove element
-        firstCard.style.visibility = 'hidden';
-        secondCard.style.visibility = 'hidden';
-
-    }
-    else {
-        console.log(`${firstCard.dataset.img} is not equal to ${secondCard.dataset.img}`);
-        hideCards();
-    }
+        //firstCard = this.dataset.img;
+        console.log("id" + this.id)
+        cardId = this.id;
+        cardCount++;  
+        // Send back to server
+        socket.emit('playerClick', cardId);     
+    }  
 }
 
 function showCards() {
-    const card = document.querySelectorAll('.card');
-    card.forEach(card => {
-        card.classList.toggle('flipped', true);
-    });
+    setTimeout(() => {
+        const card = document.querySelectorAll('.card');
+        card.forEach(card => {
+            card.classList.toggle('flipped', true);
+        });
+        hideCards();
+    }, 4000);
+
 }
 
 function hideCards() {
-    const card = document.querySelectorAll('.card');
-    card.forEach(card => {
-        card.classList.toggle('flipped', false);
-    });
+    setTimeout(()=> {
+        const card = document.querySelectorAll('.card');
+        card.forEach(card => {
+            card.classList.toggle('flipped', false);
+        });
+    }, 800);
 }
 
 
-function flipBack() {
-    this.classList.toggle('flipped', false);
+function flipBack(card) {
+    document.getElementById(card).classList.toggle('flipped', false);
 }
 // End state: - Check points to see who won
-//            - Return Victory or Defeat screen
+//            - Return Victory or Defeat screen                                                 
 //            - Update W/L/T
 //            - Call IdleState 
 function endState() {
@@ -103,12 +93,26 @@ function endState() {
 
 // Defeat Screen
 
-/* Export functions?? */
 
+function countdownScreen() {
+    let count = 3;
+    const countdownTimer = setInterval(() => {
+        if (count <= 0) {
+            clearInterval(countdownTimer);
+            countdownOff();
+            // Call game start function
+        }
+        else {
+            document.getElementById('countdown').innerHTML = count;
+        }
+        count -= 1;
+    }, 1000);
+}
 
-function off() {
+function countdownOff() {
     document.getElementById("overlay").style.display = "none";
   }
-  function on() {
+  function countdownOn() {
     document.getElementById("overlay").style.display = "block";
+    countdownScreen();
   }

@@ -18,10 +18,13 @@ socket.on('updateData', ({ users }) => {
     // deconstruct the object properties
     const container = document.querySelector('.info-grid');
     container.innerHTML = '';
-    users.forEach( ({ id, name, roomID, src, win, loss, tie, points, turn, color  }) => {
+    users.forEach( ({ id, name, roomID, src, win, loss, tie, points, turn, color }) => {
         // update player info in DOM
         outputPlayerInfo(name, roomID, src, win, loss, tie, points, turn, color);
-
+        if (turn) {
+            // Outline player
+            highlightPlayer(name.trim());
+        }
     });
 })
 
@@ -49,27 +52,98 @@ socket.on('message', message => {  // receive object containing name, image, mes
 }); 
 
 
+let isReady = false;
+// Ready button event listener
+document.getElementById('rdy').addEventListener('click', (e) => {
+    console.log('work')
+    if (!isReady) {
+        isReady = true;
+        // send to server
+        socket.emit('playerReady');
+    }
+    else {
+        isReady = false;
+        socket.emit('playerUnready');
+    }
+});
 
+// Listen for game start
+socket.on('countdown', () => {
+    // Send countdown
+    countdownOn();
+    showCards();
+    //socket.emit('gameStart');
+});
+
+// Listen for players turn.. send function to click card
+socket.on('playerTurn', playerData => {
+    // Click card
+    if (playerData.turn) {
+        setTimeout(()=> {
+            playTurn();
+        }, 200);
+    }   
+});
+
+// Change DOM of player turn
+socket.on('playerName', playerData => {
+    document.getElementById('turn').innerHTML = `[ ${playerData.name} ]'s Turn`;
+     highlightPlayer(playerData.name.trim());
+
+});
+
+// Change DOM of card flip
+socket.on('cardFlip', cardId => {
+    document.getElementById(cardId).classList.toggle('flipped', true);
+});
+
+// Change DOM to remove cards
+socket.on('removeCards', (firstCard, secondCard) => {
+    document.getElementById(firstCard).style.opacity = '1';
+    document.getElementById(secondCard).style.opacity = '1';
+    
+    setInterval(()=> {
+        document.getElementById(firstCard).style.transition = 'hidden 1s opacity 1s';
+        document.getElementById(secondCard).style.transition = 'hidden 1s opacity 1s';
+        document.getElementById(firstCard).style.visibility = 'hidden';
+        document.getElementById(secondCard).style.visibility = 'hidden';
+        document.getElementById(firstCard).style.opacity = '0';
+        document.getElementById(secondCard).style.opacity = '0';
+    }, 600)
+
+});
+
+// Flip cards back
+socket.on('flipCards', (firstCard, secondCard, name) => {
+    name = name.trim();
+    setTimeout(() => {
+        flipBack(firstCard);
+        flipBack(secondCard);
+    }, 1000);
+    removeHighlight(name);
+});
 
 
 // Take in name and sprites array from the server, update the DOM with div
-function outputPlayerInfo(name, roomID, src, win, loss, tie, points, turn, color ) {
+function outputPlayerInfo(name, roomID, src, win, loss, tie, points, turn, color) {
     document.getElementById('roomName').innerHTML = `Room ID: ${roomID}`;
     const container = document.querySelector('.info-grid');
     const div = document.createElement('div');
     div.setAttribute('class', 'info');
+    const nameId = name.trim();
+
     div.innerHTML = `               
-                        <h3>${name}</h3>
-                        <p class="points">${points} PTS</p>
-                        <img src="avatars/${src}" style="background-color: ${color}">
-                        <ul class="scores">
-                            <p class="score-value">W</p>
-                            <p class="num">${win}</p>
-                            <p class="score-value">L</p>
-                            <p class="num">${loss}</p>
-                            <p class="score-value">T</p>
-                            <p class="num">${tie}</p>
-                        </ul>`;
+        <h3>${name}</h3>
+        <p class="points">${points} PTS</p>
+        <img id="${nameId}" src="avatars/${src}" style="background-color: ${color}">
+        <ul class="scores">
+            <p class="score-value">W</p>
+            <p class="num">${win}</p>
+            <p class="score-value">L</p>
+            <p class="num">${loss}</p>
+            <p class="score-value">T</p>
+            <p class="num">${tie}</p>
+        </ul>`;
     container.appendChild(div);
 }
 
@@ -90,4 +164,21 @@ function outputMessage(message) {
                             </div>
                         </div>`                
     container.appendChild(div);    
+}
+
+function highlightPlayer(name) {
+    const player = document.getElementById(name);
+    player.style.borderWidth = "thick";
+    player.style.borderColor = "#473144";
+    player.style.transform = "scale(1.2)";
+    player.style.transition = "1s ease-in";
+}
+
+function removeHighlight(name) {
+    const player = document.getElementById(name);
+    player.style.borderWidth = "thin";
+    player.style.borderColor = "black";
+    player.style.transform = "none";
+    player.style.transition = "1s ease-in";
+
 }
