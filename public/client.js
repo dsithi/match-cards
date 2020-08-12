@@ -53,18 +53,32 @@ socket.on('message', message => {  // receive object containing name, image, mes
 
 
 let isReady = false;
+let count = 0;
 // Ready button event listener
 document.getElementById('rdy').addEventListener('click', (e) => {
-    console.log('work')
-    if (!isReady) {
-        isReady = true;
-        // send to server
-        socket.emit('playerReady');
-    }
-    else {
-        isReady = false;
-        socket.emit('playerUnready');
-    }
+    // Check if 2/2 players have already pressed ready
+    socket.emit('checkPlayers');
+
+    // Receive number of players ready'd up
+    socket.on('playerNum', playerNum => {
+        if ((playerNum === 0 || playerNum === 1) && count === 0) { // No player had clicked ready
+            // Allow click
+            isReady = true;
+            // change bg color
+            document.getElementById('rdy').style.backgroundColor = "#778da9";
+            // send to server
+            socket.emit('playerReady');
+            count++;
+        }
+        else if (isReady && (playerNum === 0 || playerNum === 1) && count === 1) {
+            // Unready
+            isReady = false;
+            // change bg color
+            document.getElementById('rdy').style.backgroundColor = "#2A4465";
+            socket.emit('playerUnready');
+            count--;
+        }
+    });
 });
 
 // Listen for game start
@@ -72,7 +86,28 @@ socket.on('countdown', () => {
     // Send countdown
     countdownOn();
     showCards();
-    //socket.emit('gameStart');
+
+    isReady = false;
+    disableReady();
+
+});
+
+// FIX IDS
+
+// Listen for randomize cards, update the client
+socket.on('randomizeCards', cards => {
+    // Change dataset of each card
+    const cloneCards = Array.from(cards);
+    const cardDiv = document.querySelectorAll('.card');
+    cardDiv.forEach(card => {
+        card.dataset.img = cloneCards.pop();
+    })
+    // Loop through back-cards class and change src
+    //console.log(cards)
+    const backCard = document.querySelectorAll('.back-card');
+    backCard.forEach(card => {
+        card.src = cards.pop();
+    });
 });
 
 // Listen for players turn.. send function to click card
@@ -81,20 +116,28 @@ socket.on('playerTurn', playerData => {
     if (playerData.turn) {
         setTimeout(()=> {
             playTurn();
-        }, 200);
+        }, 500);
     }   
+});
+
+// Check if the game has started when 3rd/3th user joins
+socket.on('checkStarted', playerNum => {
+    if (playerNum === 2) {
+        // Disable ready
+        disableReady();
+    }
 });
 
 // Change DOM of player turn
 socket.on('playerName', playerData => {
     document.getElementById('turn').innerHTML = `[ ${playerData.name} ]'s Turn`;
      highlightPlayer(playerData.name.trim());
-
 });
 
 // Change DOM of card flip
 socket.on('cardFlip', cardId => {
     document.getElementById(cardId).classList.toggle('flipped', true);
+    //console.log(document.getElementById(cardId).dataset.img)
 });
 
 // Change DOM to remove cards
@@ -137,11 +180,11 @@ function outputPlayerInfo(name, roomID, src, win, loss, tie, points, turn, color
         <p class="points">${points} PTS</p>
         <img id="${nameId}" src="avatars/${src}" style="background-color: ${color}">
         <ul class="scores">
-            <p class="score-value">W</p>
+            <p class="score-value">Win</p>
             <p class="num">${win}</p>
-            <p class="score-value">L</p>
+            <p class="score-value">Loss</p>
             <p class="num">${loss}</p>
-            <p class="score-value">T</p>
+            <p class="score-value">Tie</p>
             <p class="num">${tie}</p>
         </ul>`;
     container.appendChild(div);
@@ -167,11 +210,14 @@ function outputMessage(message) {
 }
 
 function highlightPlayer(name) {
-    const player = document.getElementById(name);
-    player.style.borderWidth = "thick";
-    player.style.borderColor = "#473144";
-    player.style.transform = "scale(1.2)";
-    player.style.transition = "1s ease-in";
+    setTimeout(()=> {
+        const player = document.getElementById(name);
+        player.style.borderWidth = "thin";
+        player.style.borderColor = "transparent";
+        player.style.transform = "scale(1.2)";
+        player.style.transition = ".5s ease-in";
+    }, 1000);
+
 }
 
 function removeHighlight(name) {
@@ -179,6 +225,19 @@ function removeHighlight(name) {
     player.style.borderWidth = "thin";
     player.style.borderColor = "black";
     player.style.transform = "none";
-    player.style.transition = "1s ease-in";
+    player.style.transition = ".3s ease-in";
 
+}
+
+function enableReady() {
+    document.getElementById('rdy').removeAttribute('disabled');
+    document.getElementById('rdy').style.backgroundColor = "#2A4465";
+    document.getElementById('rdy').style.cursor = "pointer";
+}
+
+function disableReady() {
+    // Disable ready button (re-enable on game over)
+    document.getElementById('rdy').setAttribute('disabled', true);
+    document.getElementById('rdy').style.backgroundColor = "#1E1B22";
+    document.getElementById('rdy').style.cursor = "default";
 }

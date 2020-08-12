@@ -1,37 +1,3 @@
-
-
-// Idle state: - Randomize Cards
-//             - Wait for players to ready
-function idleState() { /* Adjust for server/client .. return images?*/
-    // Image array
-    const pre = 'Assets/images/icons/';
-    const images = [
-        `${pre}Gyudon.png`,`${pre}Gyudon.png`,`${pre}Miso_Soup.png`,`${pre}Miso_Soup.png`,
-        `${pre}Narutomaki.png`,`${pre}Narutomaki.png`,`${pre}Nigiri_01.png`,`${pre}Nigiri_01.png`,
-        `${pre}Onigiri.png`,`${pre}Onigiri.png`,`${pre}Ramen.png`,`${pre}Ramen.png`,
-        `${pre}Salmon_Roll.png`,`${pre}Salmon_Roll.png`,`${pre}Shrimp_02.png`,`${pre}Shrimp_02.png`,
-        `${pre}Soy_Sauce.png`,`${pre}Soy_Sauce.png`,`${pre}Takoyaki.png`,`${pre}Takoyaki.png` 
-    ]
-    // Randomize image sources/id ?
-    for (let i = 0; i < images.length; i++) {
-        const j = Math.floor(Math.random()* i);
-        const temp = images[i];
-        images[i] = images[j];
-        images[j] = temp;
-    }
-    // Loop through back-cards class and change src
-    const backCard = document.querySelectorAll('.back-card');
-    backCard.forEach(card => {
-        card.src = images.pop();
-        //card.style.visibility = 'visible'
-    });
-    
-}
-
-
-// Play state:  - Chat Message, show cards one by one, track player turn
-//              - keep track of total cards, points on correct, allow two clicks (reset on right)
-//              - countdown(resets), Call EndState when cards reach 0  
 let cardCount = 0;
 let firstCard, secondCard;
 let canClick = true;
@@ -49,12 +15,13 @@ function playTurn() {
 function flipCard() {
     if (cardCount < 1) {
         this.classList.toggle('flipped', true);
-        //firstCard = this.dataset.img;
-        console.log("id" + this.id)
-        cardId = this.id;
+        // Pass in dataset value to playerClick
+        //console.log("id" + this.dataset.img)
+        const cardId = this.id;
+        const dataId = this.dataset.img
         cardCount++;  
         // Send back to server
-        socket.emit('playerClick', cardId);     
+        socket.emit('playerClick', cardId, dataId);     
     }  
 }
 
@@ -115,4 +82,17 @@ function countdownOff() {
   function countdownOn() {
     document.getElementById("overlay").style.display = "block";
     countdownScreen();
+  }
+
+  // enable/disable button
+  function disableReady() {
+    document.getElementById('rdy').setAttribute('disabled', true);
+    document.getElementById('rdy').style.backgroundColor = "#1E1B22";
+    document.getElementById('rdy').style.cursor = "default";
+  }
+
+  function enableReady() {
+    document.getElementById('rdy').removeAttribute('disabled');
+    document.getElementById('rdy').style.backgroundColor = "#2A4465";
+    document.getElementById('rdy').style.cursor = "pointer";
   }

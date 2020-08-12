@@ -8,8 +8,9 @@ const http = require('http');
 const socket = require('socket.io');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./Utils/users.js');
 const { playerReady, playerUnready, getPlayers, findTurn, addCard, removeCard, getCards, checkMatch } = require('./Utils/players.js');
+const { createCards, getSet, randomizeCards } = require('./Utils/cards.js');
 const formatMessage = require('./Utils/messages.js');
-const BOT = { name: 'CAT BOT', src: 'animal.svg', color: 'orange' };
+const BOT = { name: 'MR CAT', src: 'animal.svg', color: '#3C3744' };
 
 // create express app, set port
 const app = express();
@@ -38,6 +39,11 @@ io.on('connection', socket => {
             const {user} = addUser({ id: socket.id, name, roomID: null, src });
             socket.join(user.roomID);
 
+            // create new set of cards, randomize cards
+            createCards(user.roomID);
+            const cards = getSet(user.roomID);
+            randomizeCards(cards);
+            //console.log(getSet(user.roomID));
              // welcome user
              io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color, 'Welcome to the chat!'));
 
@@ -45,6 +51,12 @@ io.on('connection', socket => {
             io.to(user.roomID).emit('updateData', { 
                 users: getUsersInRoom(user.roomID)
              });
+            // console.log(getSet(user.roomID))
+            // send randomized cards
+            io.to(user.roomID).emit('randomizeCards', 
+                 getSet(user.roomID) 
+             );
+
 
         }
         // Check if roomID is stored and check if the room is full //
@@ -54,11 +66,22 @@ io.on('connection', socket => {
                 return callback(error);
             }
             if (user) {
+                // join room
                 socket.join(user.roomID);
+
+                // send randomized cards
+                io.to(user.roomID).emit('randomizeCards', 
+                getSet(user.roomID) 
+                );  
+
+                // send length of players in queue
+                let players = getPlayers(user.roomID);
+                io.to(user.id).emit('checkStarted', players.length);
+
                 io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color, 'Welcome to the chat!'));
                 // msg to all but connected user
                 socket.broadcast.to(user.roomID).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`${user.name} has joined`));
-                //const users = getUsersInRoom(user.roomID);
+               
         
             }
             //console.log(io.sockets.adapter.rooms[roomID].length)
@@ -84,6 +107,14 @@ io.on('connection', socket => {
         }
     });
 
+
+    // Listen for client to check player queue, return length
+    socket.on('checkPlayers', () => {
+        const user = getUser(socket.id);
+        let players = getPlayers(user.roomID);
+        socket.emit('playerNum', players.length);
+    });
+
     // Listen for player to ready
     socket.on('playerReady', () => {
         const user = getUser(socket.id);
@@ -97,10 +128,12 @@ io.on('connection', socket => {
         else if (players.length === 1) {
                 playerReady(user);
                 io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have joined the queue.`));
+
                 // Send countdown socket
                 io.to(user.roomID).emit('countdown');
                 io.to(user.roomID).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`The game will begin soon`));
                 io.to(user.roomID).emit('playerReady', user);
+
                 // Randomize player turn
                 let player = getPlayers(user.roomID);
                 const num = Math.floor(Math.random() * Math.floor(2));
@@ -122,6 +155,8 @@ io.on('connection', socket => {
                 io.to(user.roomID).emit('updateData', { 
                     users: getUsersInRoom(user.roomID)
                 });
+
+
         }
         else {
             io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`The queue is full. Please wait`));
@@ -129,19 +164,15 @@ io.on('connection', socket => {
         
     });
     
-    //const cards = [];
-
     // Listen for player card click, pass to all clients
-    socket.on('playerClick', cardId => {
+    socket.on('playerClick', (cardId, dataId) => {
         const user = getUser(socket.id);
         let players = getPlayers(user.roomID);
         const checkCards = getCards(user.roomID);
-        // store player data
-        
 
         // check cards array, if 0 addCard, allow another click, pass to all.. if 1: add card and check if the cards match
         if (checkCards.length === 0) {
-            addCard({ roomID: user.roomID, cardID: cardId });
+            addCard({ roomID: user.roomID, cardID: cardId, dataID: dataId });
             
             // Pass card data to the clients
             io.to(user.roomID).emit('cardFlip', cardId);
@@ -152,7 +183,7 @@ io.on('connection', socket => {
 
         // One card in array: add card to array and check match
         if (checkCards.length === 1) {
-            addCard({ roomID: user.roomID, cardID: cardId });
+            addCard({ roomID: user.roomID, cardID: cardId, dataID: dataId });
             const cardList = getCards(user.roomID);
             //console.log(`Card Length: ${cardList.length}`)
             // Pass card data to the clients
@@ -170,8 +201,10 @@ io.on('connection', socket => {
                     user.points += 100;
                     // Emit to clients to remove cards in DOM
                     io.to(user.roomID).emit('removeCards', cardList[0].cardID, cardList[1].cardID);
+                    // send data to all the clients in the room
                     io.to(user.roomID).emit('updateData', { 
-                        users: getUsersInRoom(user.roomID)
+                        users: getUsersInRoom(user.roomID),
+                        cards: getSet(user.roomID)
                     });
                     // Remove cards
                     removeCard(user.roomID);
@@ -181,12 +214,9 @@ io.on('connection', socket => {
                     io.to(user.id).emit('playerTurn', user);
                 }
 
-                /* 8/6/2020 @@@@@@@@@@!!! ONLY ONE CARD FLIPS BACK!!! FINISH THIS PART!!! ---FIXED?*/ 
-                // Card dont match: flip the two cards back to clients, randomize cards?, change player turn to false and other to true, pass playerTurn/playerName
-                // 8/7/2020:: Fix highlights? Player Turn switch, Make sure cards are removing?
-                // Same card press glitches up...
                 if (!match) {
                     // Flip card back
+                    //console.log(cardList[0].cardID)
                     io.to(user.roomID).emit('flipCards', cardList[0].cardID, cardList[1].cardID, user.name);
                     // Remove cards
                     removeCard(user.roomID);
@@ -197,14 +227,12 @@ io.on('connection', socket => {
                     players = getPlayers(user.roomID);
                     let playerData;
                     if (players[0].turn) {
-                            console.log('true player0')
                             players[0].turn = !players[0].turn;
                             players[1].turn = !players[1].turn;
                             playerData = players[1];
                     }
 
                     else {
-                        console.log('true player1')
                         players[0].turn = !players[0].turn;
                         players[1].turn = !players[1].turn;
                         playerData = players[0];
@@ -236,25 +264,9 @@ io.on('connection', socket => {
                      io.to(user.roomID).emit('playerName', playerData);                    
                 }
             }
-
-
         }
-    
-
     });
 
-    // Listen for playerTurn to begin game.. client sends user with turn:true, 
-    /*
-    socket.on('playerTurn', () => {
-        // get user details
-        const user = getUser(socket.id);
-
-        io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`It is your turn`));
-
-        // emit to client who will call function for user to play turn
-        socket.emit('playerTurn', )
-    }); 
-    */
     socket.on('playerUnready', () => {
         const user = getUser(socket.id);
         const player = playerUnready(user.id);
@@ -268,12 +280,6 @@ io.on('connection', socket => {
     });
 
     
-
-
-
-
-
-
     // user disconnect
     socket.on('disconnect', () => {
         const user = removeUser(socket.id);
@@ -285,6 +291,7 @@ io.on('connection', socket => {
             // msg to clients user left
             io.to(user.roomID).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`${user.name} has left`));
             // update user list
+            // send data to all the clients in the room
             io.to(user.roomID).emit('updateData', { 
                 users: getUsersInRoom(user.roomID)
              });

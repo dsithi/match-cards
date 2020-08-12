@@ -11,7 +11,8 @@ html {
 
 body {
     height: 95vh;
-    background-color: #FFFFFF;
+    background-color: #415a77;
+    color: #e0e1dd;
 }
 
 .container {
@@ -32,11 +33,11 @@ body {
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
-    font-family: 'Montserrat Subrayada', sans-serif;
-    background-color: #3B7080;
-    -webkit-text-stroke-width: 0.2px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
+    /*font-family: 'Montserrat Subrayada', sans-serif;*/
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    background-color: #1b263b;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     user-select: none;
 }
 
@@ -46,22 +47,24 @@ body {
     left: 10px;
     font-size: 1.5em;
     color: #FEFFFF;
-    font-family: 'Roboto', sans-serif;
 }
 
 .player-turn {
     position: absolute;
     bottom: 0;
-    left: 10px;
+    left: 130px;
     font-size: 2.5em;
     color: #FEFFFF;
-    font-family: 'Roboto', sans-serif;
+}
+#turn {
+    font-size: 2.5em;
+    color: #FEFFFF;
 }
 
 .title {
     position: absolute;
     bottom: 0;
-    right: 35%;
+    right: 38%;
     font-size: 3.4em;
     color: #FEFFFF;
     margin: -10px;
@@ -74,19 +77,18 @@ body {
     right: 1%;
     font-size: 1.5em;
     color: #FEFFFF;
-    font-family: 'Roboto', sans-serif;
+
 }
 
 
 /* Game */
 .game-container {
-    background-color: #DEF2F1;
+    background-color: #1b263b;
     position: relative;
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
     grid-row-end: 15;
-    border-top-left-radius: 4px;
     user-select: none;
 }
 
@@ -103,7 +105,7 @@ body {
 }
 /* Change background color on flip !!*/
 .card {
-    background-color: #3B7080;
+    background-color: #415a77;
     border-radius: 5px;
     width: 145px;
     height: 175px;
@@ -117,7 +119,7 @@ body {
 .card:active {
     transform: scale(0.97);
     transition: all .2s;
-    background-color: #006666;
+    background-color: #778da9;
   }
 /* 
 .card:hover {
@@ -144,7 +146,7 @@ body {
     transform: rotateY(180deg);
     cursor: pointer;
     backface-visibility: hidden;
-    background-color: #A2DDE2;
+    background-color: #778da9;
 }
 
 .card.flipped {
@@ -154,15 +156,13 @@ body {
 
 /* Player Info */
 .player-info {
-    background-color: #DEF2F1;
+    background-color: #1b263b;
     border: 2px;
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 2;
     grid-row-end: 9;
-    border-radius: 8px;
     user-select: none;
-    font-family: 'Roboto', sans-serif;
 }
 
 .info {
@@ -182,30 +182,33 @@ body {
     width: 125px;
     height: 125px;
     display: inline-block;
-    margin-top: 8px;
-    border-radius: 5px;
+    margin-top: 15px;
+    border-radius: 2px;
     padding: 0;
-    border: 2px solid;
+    border: 2px solid transparent;
 }
 
 .info-grid h3 {
     padding: 0;
-    background-color: #336270;
-    margin-bottom: 0;
-    margin-top: 10px;
+    background-color: #1b263b;
+    margin-bottom: -20px;
+    margin-top: 5px;
     color: white;
     height: 60px;
-    padding-top: 15px;
+    padding-top: 5px;
     font-size: 1.6em;
     font-family: 'Work Sans', sans-serif;
-    font-weight: lighter;
+    font-weight: 100;
 }
 
 .points {
     font-size: 1.3em;
     text-align: center;
-    background-color: #47869A;
+    background-color: #415a77;
+    border-radius: 3px;
     color: #DEF2F1;
+    font-family: 'Work Sans', sans-serif;
+    margin-right: 3px;
 }
 
 .scores {
@@ -213,29 +216,33 @@ body {
     height: 30%;
     font-size: 2em;
     padding: 9px;
-    margin: 1px;
-    background-color: #336270;
-    border: 1px solid;
-    border-radius: 15px;
+    margin-top: 15px;
+    background-color: #415a77;
+    border: 1px solid transparent;
+    border-radius: 3px;
     color: white;
-
+    font-family: 'Work Sans', sans-serif;
 
 }
 .score-value{
     float: left;
     text-align: left;
     width:43.33333%;
+    font-size: .8em;
+    font-family: 'Work Sans', sans-serif;
+    margin-top: 4px;
 }
 .num{
     float: left;
     text-align: right;
     width:50.33333%;
     color:white;
+    font-family: 'Work Sans', sans-serif;
 }
 
 
 .start-container {
-    background-color: #DEF2F1;
+    background-color: #1b263b;
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 8;
@@ -245,12 +252,12 @@ body {
 
 /* Chat Box */
 .chat-container {
-    background-color: #E4FDE1;
+    background-color: #1b263b;
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 9;
     grid-row-end: 14;
-    max-width: 568px;
+    max-width: 575px;
     
     /*font-family: 'Libre Franklin', sans-serif; */
 }
@@ -266,9 +273,9 @@ li {
     border-radius: 6px;
     height: 100%;
     max-height: 500px;
-    max-width: 568px;
+    max-width: 570px;
     padding: 4px;
-    background-color: #3A6E7E;
+    background-color: #1b263b;
     
 }
 
@@ -279,7 +286,7 @@ li {
 .chat-box img {
     width: 48px;
     height: 45px;
-    border-radius: 60px;
+    border-radius: 25px;
     margin-right: 1px;
     padding: 2px;
     margin-top: 2px;
@@ -302,14 +309,14 @@ li {
     flex-wrap: wrap;
 }
 .message {
-    background-color: #82b9ca;
+    background-color: #415a77;
     border-radius: 3px;
-    padding: 8px 5px;
+    padding: 10px 5px;
     display: block;
     max-width: auto;
-    height: 35px;
+    height: 38px;
     margin: 0;
-    margin-bottom: 2px;
+    margin-bottom: 15px;
     margin-top: 8px;
     overflow: hidden;
     font-size: .5em;
@@ -327,12 +334,12 @@ li {
 .msg-time {
     font-size: .9em;
     margin-right: 1px;
-    color: #BCF8EC;
+    color: #778da9;
     font-family: 'Work Sans', sans-serif;
 }
 
 .msg-text {
-    color: #2F2F2F;
+    color: #e0e1dd;
     font-family: 'Work Sans', sans-serif;
 }
 .chat-form-container {
@@ -345,7 +352,8 @@ li {
     display: flex;
     height: 64px;
     padding: 1px 3px;
-    background-color: #DEF2F1;
+    background-color: #1b263b;
+    color: white;
     border-bottom-right-radius: 4px;
     user-select: none;
 }
@@ -364,7 +372,13 @@ li {
     margin-top: 10px;
     margin-right: 20px;
     font-family: 'Quicksand', sans-serif;
+    color: white;
 }
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #274C77;
+    opacity: 1; /* Firefox */
+  }
 
 .chat-form-container input[type="text"]:focus {
     outline: none;
@@ -387,11 +401,13 @@ li {
 .btn:hover, .btns:hover {
     cursor: pointer;
     background-color: #2A4465;
-    color: #DEF2F1;
     transform: scale(1);
     transition: .31s ease-out;
 }
-
+.btn:active, .btns:active {
+    background-color: #778da9;
+    transform: scale(0.9);
+}
 .btns {
     height: 55px;
     width: 100px;
@@ -405,9 +421,6 @@ li {
     color: #feffff;
 }
 
-
-
-
     
 /* Index */
 .index-container, .create-container, .join-container {
@@ -416,7 +429,8 @@ li {
     flex-wrap: nowrap;
 
     border-radius: 15px;
-    background-color: #336270;
+    background-color: #1b263b;
+    color: black;
     position: absolute;
     padding: 10px 15px;
 
@@ -425,7 +439,7 @@ li {
     margin-right: -50%;
     transform: translate(-50%, -50%);
 
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     box-shadow: 0 20px 50px rgba(59, 43, 91, 0.4);
     user-select: none;
 }
@@ -444,14 +458,13 @@ li {
     margin-bottom: 15px;
 }
 
-.top h1 {
-    font-size: 3.8em;
-    -webkit-text-stroke-width: 0.5px;
+.top p {
+    font-size: 3.5em;
     height: 140px;
     width: 100%;
     color: white;
     text-align: center;
-    font-family: 'Montserrat Subrayada', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     user-select: none;
 } 
 
@@ -492,7 +505,7 @@ li {
     display: inline-block;
     height: 75px;
     width: 220px;
-    background-color: #2A4465;
+    background-color: #1b263b;
     border: 1px;
     border-radius: 3px;
     font-family: 'Quicksand', sans-serif;
@@ -513,14 +526,20 @@ li {
 .create-container, .join-container{
     width: 900px;
     min-width: 800px;
-
+    color: white;
     height: 500px;
     min-height: 400px;
 }
+
 .create-container p, .join-container p {
     font-size: 3em;
     margin-bottom: 15px;
-    margin-top: 5px;
+    margin-top: 4px;
+    color: black;
+}
+
+#title {
+    color:white;
 }
 
 .create-container input[type="text"]{
@@ -573,7 +592,7 @@ li {
 /* IMAGE STYLES */
 [type=radio] + img {
     cursor: pointer;
-    background-color: #2F7789;
+    background-color: #0d1b2a;
   }
 
 [type=radio] + img:hover {
@@ -582,7 +601,7 @@ li {
 
   /* CHECKED STYLES */
 [type=radio]:checked + img {
-    background-color: #9AC1BA;
+    background-color: #415a77;
     border: 2px solid #031926;
     transform: scale(1.1);
   }
