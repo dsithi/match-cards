@@ -45,21 +45,9 @@ function hideCards() {
     }, 800);
 }
 
-
 function flipBack(card) {
     document.getElementById(card).classList.toggle('flipped', false);
 }
-// End state: - Check points to see who won
-//            - Return Victory or Defeat screen                                                 
-//            - Update W/L/T
-//            - Call IdleState 
-function endState() {
-
-}
-// Victory Screen
-
-// Defeat Screen
-
 
 function countdownScreen() {
     let count = 3;

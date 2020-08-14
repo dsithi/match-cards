@@ -25,6 +25,8 @@ const io = socket(server);
 // serve static html files
 app.use(express.static('public'));
 
+let totalPoints = 0;
+let winner = "";
 // Run when client connects
 io.on('connection', socket => {
     // listen for when user joins
@@ -39,10 +41,9 @@ io.on('connection', socket => {
             const {user} = addUser({ id: socket.id, name, roomID: null, src });
             socket.join(user.roomID);
 
-            // create new set of cards, randomize cards
+// HERE..   
             createCards(user.roomID);
-            const cards = getSet(user.roomID);
-            randomizeCards(cards);
+
             //console.log(getSet(user.roomID));
              // welcome user
              io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color, 'Welcome to the chat!'));
@@ -115,6 +116,7 @@ io.on('connection', socket => {
         socket.emit('playerNum', players.length);
     });
 
+    
     // Listen for player to ready
     socket.on('playerReady', () => {
         const user = getUser(socket.id);
@@ -122,16 +124,15 @@ io.on('connection', socket => {
         if (players.length < 1) {
             // Message to all in the room
             playerReady(user);
-            io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have joined the queue. Waiting for 1 more player`));
+            //io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have joined the queue. Waiting for 1 more player`));
             io.to(user.roomID).emit('playerReady', user);
         }
         else if (players.length === 1) {
                 playerReady(user);
-                io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have joined the queue.`));
+                //io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have joined the queue.`));
 
                 // Send countdown socket
                 io.to(user.roomID).emit('countdown');
-                io.to(user.roomID).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`The game will begin soon`));
                 io.to(user.roomID).emit('playerReady', user);
 
                 // Randomize player turn
@@ -139,11 +140,19 @@ io.on('connection', socket => {
                 const num = Math.floor(Math.random() * Math.floor(2));
                 player[num].turn = true;
 
+                //console.log('Players : ' + JSON.stringify(player));
+
                 // Change player turn value in Users array
                 const playerData = getUser(player[num].id);
                 playerData.turn = true;
                 
-                //io.to(player[num].id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`It is your turn`));
+                // Randomize cards
+                const cards = getSet(user.roomID);
+                randomizeCards(cards);
+                // Send randomized cards
+                io.to(user.roomID).emit('randomizeCards', 
+                    getSet(user.roomID) 
+                );  
 
                 // Send player whose turn it is to client
                 io.to(player[num].id).emit('playerTurn', playerData);
@@ -164,16 +173,17 @@ io.on('connection', socket => {
         
     });
     
+    
     // Listen for player card click, pass to all clients
     socket.on('playerClick', (cardId, dataId) => {
         const user = getUser(socket.id);
         let players = getPlayers(user.roomID);
         const checkCards = getCards(user.roomID);
-
+        console.log(checkCards.length)
         // check cards array, if 0 addCard, allow another click, pass to all.. if 1: add card and check if the cards match
         if (checkCards.length === 0) {
             addCard({ roomID: user.roomID, cardID: cardId, dataID: dataId });
-            
+            console.log('Players : ' + JSON.stringify(players));
             // Pass card data to the clients
             io.to(user.roomID).emit('cardFlip', cardId);
 
@@ -197,21 +207,83 @@ io.on('connection', socket => {
                 
                 // Cards match: remove the two cards, send to clients, update points, allow another turn
                 if (match) {
-                    // Update player points
+                    // Update player points and total pts
                     user.points += 100;
+                    totalPoints += 100;
+
                     // Emit to clients to remove cards in DOM
                     io.to(user.roomID).emit('removeCards', cardList[0].cardID, cardList[1].cardID);
+
                     // send data to all the clients in the room
                     io.to(user.roomID).emit('updateData', { 
                         users: getUsersInRoom(user.roomID),
-                        cards: getSet(user.roomID)
                     });
+
                     // Remove cards
                     removeCard(user.roomID);
                     removeCard(user.roomID);
 
-                    // Allow player turn
-                    io.to(user.id).emit('playerTurn', user);
+                    // Check if points is less than 1000
+                    console.log('total points: ' + totalPoints)
+                    
+                    // Check if points are equal to 1000 (game over)
+                    if (totalPoints === 1000) {
+                        // Check which user had more points
+                        const playerPoints = getPlayers(user.roomID);
+                        if (playerPoints[0].points > playerPoints[1].points) {
+                            // Player 1 wins
+                            console.log(`${playerPoints[0].name} Wins with ${playerPoints[0].points} points!!`)
+                            winner = playerPoints[0].name;
+                            // Update scores
+                            playerPoints[0].win += 1;
+                            playerPoints[1].loss += 1;
+                        }
+                        if (playerPoints[0].points < playerPoints[1].points) {
+                            // Player 2 wins
+                            console.log(`${playerPoints[1].name} Wins with ${playerPoints[1].points} points!!`)
+                            winner = playerPoints[1].name;
+                            // Update scores
+                            playerPoints[1].win += 1;
+                            playerPoints[0].loss += 1;
+                        }
+                        if (playerPoints[0].points === playerPoints[1].points) {
+                            // Tie
+                            console.log(`It is a tie !!`)
+                            winner = "TIE";
+                            // Update scores
+                            playerPoints[0].tie += 1;
+                            playerPoints[1].tie += 1;
+                        }
+
+                        // Reset turns
+                        playerPoints[0].turn = false;
+                        playerPoints[1].turn = false;
+                        playerPoints[0].points = 0;
+                        playerPoints[1].points = 0;
+                        //playerUnready(playerPoints[0].id);
+                        //io.to(user.roomID).emit('playerUnready', playerPoints[0].id);
+                        //playerUnready(playerPoints[1].id);
+                        //io.to(user.roomID).emit('playerUnready', playerPoints[1].id);
+                        
+                        // Reset total points
+                        totalPoints = 0;
+
+                       // io.to(playerPoints[0].id).emit('resetButton');
+                        //io.to(playerPoints[1].id).emit('resetButton');
+                        // Send updated data to client
+                        io.to(user.roomID).emit('endData', { 
+                            users: getUsersInRoom(user.roomID)
+                        });
+
+                        // Emit gameOver to client to reset game
+                        io.to(user.roomID).emit('gameOver', winner);             
+                    }
+
+                    else {
+                        // Allow player turn
+                        io.to(user.id).emit('playerTurn', user);
+                    }
+
                 }
 
                 if (!match) {
@@ -224,17 +296,19 @@ io.on('connection', socket => {
                     
                     // Change player turn in players
                     const users = getUsersInRoom(user.roomID);
-                    players = getPlayers(user.roomID);
+                    const players = getPlayers(user.roomID);      // --->
+                    console.log(players)
                     let playerData;
+                    
                     if (players[0].turn) {
-                            players[0].turn = !players[0].turn;
-                            players[1].turn = !players[1].turn;
+                            players[0].turn = false;
+                            players[1].turn = true;
                             playerData = players[1];
                     }
 
                     else {
-                        players[0].turn = !players[0].turn;
-                        players[1].turn = !players[1].turn;
+                        players[0].turn = true;
+                        players[1].turn = false;
                         playerData = players[0];
                     }
 
@@ -274,7 +348,7 @@ io.on('connection', socket => {
         if (player) {
             player.turn = false;
             io.to(user.roomID).emit('playerUnready', user);
-            io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have been removed from the queue`));
+            //io.to(user.id).emit('message', formatMessage(BOT.name, BOT.src, BOT.color,`You have been removed from the queue`));
         }  
         
     });

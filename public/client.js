@@ -55,13 +55,20 @@ socket.on('message', message => {  // receive object containing name, image, mes
 let isReady = false;
 let count = 0;
 // Ready button event listener
-document.getElementById('rdy').addEventListener('click', (e) => {
-    // Check if 2/2 players have already pressed ready
-    socket.emit('checkPlayers');
+document.getElementById('rdy').addEventListener('click', sendReady, false);
 
-    // Receive number of players ready'd up
-    socket.on('playerNum', playerNum => {
-        if ((playerNum === 0 || playerNum === 1) && count === 0) { // No player had clicked ready
+function sendReady() {
+    // Check if 2/2 players have already pressed ready
+    console.log(count)
+    socket.emit('checkPlayers');
+}
+// Receive number of players ready'd up
+socket.on('playerNum', playerNum => {
+    //console.log('PLayerNUMS: ' + playerNum)
+    //console.log(isReady)
+    if (count === 0) {
+        if ((playerNum === 0 || playerNum === 1)) { // No player had clicked ready
+            if(!isReady) {
             // Allow click
             isReady = true;
             // change bg color
@@ -69,30 +76,35 @@ document.getElementById('rdy').addEventListener('click', (e) => {
             // send to server
             socket.emit('playerReady');
             count++;
+            //console.log('player ready')
+             }
         }
-        else if (isReady && (playerNum === 0 || playerNum === 1) && count === 1) {
+     }
+    else if (count === 1) {
+        if ((playerNum === 0 || playerNum === 1)) {
+            if (isReady) {
             // Unready
             isReady = false;
             // change bg color
-            document.getElementById('rdy').style.backgroundColor = "#2A4465";
+             document.getElementById('rdy').style.backgroundColor = "#2A4465";
             socket.emit('playerUnready');
+            //console.log('player un-ready')
             count--;
+            }
         }
-    });
-});
+    }
 
+});
 // Listen for game start
 socket.on('countdown', () => {
     // Send countdown
     countdownOn();
     showCards();
 
-    isReady = false;
+    //isReady = false;
     disableReady();
 
 });
-
-// FIX IDS
 
 // Listen for randomize cards, update the client
 socket.on('randomizeCards', cards => {
@@ -113,6 +125,7 @@ socket.on('randomizeCards', cards => {
 // Listen for players turn.. send function to click card
 socket.on('playerTurn', playerData => {
     // Click card
+    console.log(playerData);
     if (playerData.turn) {
         setTimeout(()=> {
             playTurn();
@@ -126,6 +139,61 @@ socket.on('checkStarted', playerNum => {
         // Disable ready
         disableReady();
     }
+});
+
+// Listen for game over: reset the cards visibility, change text to winner, enable ready, isReady to false
+socket.on('gameOver', (winner) => {
+    socket.emit('playerUnready');
+    document.getElementById('countdown').innerHTML = "";
+    if (winner === 'TIE') {
+        document.getElementById('turn').innerHTML = `${winner}!!!`;
+    }
+    else {
+        document.getElementById('turn').innerHTML = `${winner} is the winner!!!`;
+    }
+    //isReady = false;
+    enableReady();
+    count = 0;
+    isReady = false;
+    // Show cards again
+    setTimeout(()=> {
+        const card = document.querySelectorAll('.card');
+        card.forEach(card => {
+            card.classList.remove('hide');
+            card.classList.toggle('flipped', false);
+            //card.style.pointerEvents = 'auto';
+            //console.log(card)
+        });
+    }, 1000);
+
+
+});
+
+socket.on('resetButton', () => {
+    setTimeout(()=>{
+    // Unready
+    isReady = false;
+    // change bg color
+    document.getElementById('rdy').style.backgroundColor = "#2A4465";
+     socket.emit('playerUnready');
+    })
+
+})
+// Update data when game over
+socket.on('endData', ({ users }) => {
+    // deconstruct the object properties
+    const container = document.querySelector('.info-grid');
+    container.innerHTML = '';
+    users.forEach( ({ id, name, roomID, src, win, loss, tie, points, turn, color }) => {
+        // update player info in DOM
+        outputPlayerInfo(name, roomID, src, win, loss, tie, points, turn, color);
+
+        setTimeout(()=> {
+        // remove Outline player
+            removeHighlight(name.trim());
+        }, 1000);
+
+    });
 });
 
 // Change DOM of player turn
@@ -142,16 +210,11 @@ socket.on('cardFlip', cardId => {
 
 // Change DOM to remove cards
 socket.on('removeCards', (firstCard, secondCard) => {
-    document.getElementById(firstCard).style.opacity = '1';
-    document.getElementById(secondCard).style.opacity = '1';
-    
-    setInterval(()=> {
-        document.getElementById(firstCard).style.transition = 'hidden 1s opacity 1s';
-        document.getElementById(secondCard).style.transition = 'hidden 1s opacity 1s';
-        document.getElementById(firstCard).style.visibility = 'hidden';
-        document.getElementById(secondCard).style.visibility = 'hidden';
-        document.getElementById(firstCard).style.opacity = '0';
-        document.getElementById(secondCard).style.opacity = '0';
+    setTimeout(()=> {
+        document.getElementById(firstCard).classList.toggle('hide', true);
+        //document.getElementById(firstCard).style.pointerEvents = 'none';
+        document.getElementById(secondCard).classList.toggle('hide', true);
+        //document.getElementById(secondCard).style.pointerEvents = 'none';
     }, 600)
 
 });
@@ -215,7 +278,7 @@ function highlightPlayer(name) {
         player.style.borderWidth = "thin";
         player.style.borderColor = "transparent";
         player.style.transform = "scale(1.2)";
-        player.style.transition = ".5s ease-in";
+        player.style.transition = ".2s ease-in";
     }, 1000);
 
 }
@@ -225,7 +288,7 @@ function removeHighlight(name) {
     player.style.borderWidth = "thin";
     player.style.borderColor = "black";
     player.style.transform = "none";
-    player.style.transition = ".3s ease-in";
+    player.style.transition = ".2s ease-in";
 
 }
 
