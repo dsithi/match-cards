@@ -1,6 +1,3 @@
-// Keep track of cards for the game - - Array of objects that include roomID and cards array
-//                                      - Create/Get/Add Cards
-
 // store the game cards in an array, have function to randomize the array and pass to all clients
 const pre = 'icons/';
 const gameCards = 
@@ -52,18 +49,6 @@ function randomizeCards(cardsArr) {
 
     return cardsArr;
 }
-/*
-createCards(43);
-createCards(1);
-
-const cards1 = getSet(43)
-const cards2 = getSet(1)
-
-//console.log(cards1);
-randomizeCards(cards1);
-console.log(cards)
-*/
-// Create card -> Store card set in variable -> Use that variable to randomize card
 
 module.exports = {
     createCards,

@@ -3,10 +3,7 @@
 
 // array of users
 const users = [];
-const pre = 'Assets/images/sprites/';
 
-
-// 
 function addUser({ id, name, roomID, src }) {
     // lowercase all
     let win = 0, loss = win, tie = win, points = win;
@@ -105,7 +102,6 @@ function generateColor() {
     const color = `rgb(${r},${g},${b})`;
     return color;
 }
-
 
 module.exports = {
     addUser,

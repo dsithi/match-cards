@@ -1,9 +1,6 @@
-
 // store users who will be playing in array, cards sent by users
 const playerList = [];
 const cards = [];
-
-
 
 function playerReady(player) {
     const existingID = playerList.find((user) => {
@@ -37,19 +34,6 @@ function getPlayers(roomID) {
     return players;
 }
 
-// look for player turn true
-function findTurn(roomID) {
-    const players = [];
-    playerList.find((user) => {
-        if (user.roomID === roomID) {
-            if (user.turn === true) {
-                players.push(user);
-            }
-        }
-    });
-    return players;
-}
-
 // Take in card object and store the roomID and cardID
 function addCard(card) {
     console.log(card)
@@ -68,7 +52,6 @@ function removeCard(roomID) {
             cards.splice(i, 1);
         }
     }
-  
 }
 
 function getCards(roomID) {
@@ -84,49 +67,27 @@ function getCards(roomID) {
 // Search for matching cardID
 function checkMatch(cardList) {
     const cards = [];
+
     cardList.forEach( ({ roomID, cardID, dataID }) => {
         // remove number from card id
-        //cardID = cardID.slice(0, -1);
         cards.push({roomID: roomID, cardID: cardID, dataID: dataID});
     });
+
     if (cards.length === 2) {
         if (cards[0].dataID === cards[1].dataID) {
             return true;
         }
     }
+
     else {
         return false;
     }
-
 }
-
-
-/*
-const num1 = { roomID: 666, cardID: 'burger1' };
-const num2 = { roomID: 666, cardID: 'burger2' };
-const num3 = { roomID: 111, cardID: 'burger1' };
-const num4 = { roomID: 666, cardID: 'burger2' };
-const num5 = { roomID: 111, cardID: 'burger12' };
-
-addCard(num1);
-addCard(num2);
-addCard(num3);
-addCard(num4);
-addCard(num5);
-
-console.log(getCards(666))
-removeCard(666);
-//removeCard(666);
-console.log(getCards(666))*/
-
-
-
 
 module.exports = {
     playerReady,
     playerUnready,
     getPlayers,
-    findTurn,
     addCard,
     removeCard,
     getCards,
