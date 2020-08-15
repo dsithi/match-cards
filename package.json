@@ -1,5 +1,5 @@
 {
-  "name": "match_cards",
+  "name": "match--cards",
   "version": "1.0.0",
   "description": "card game",
   "main": "server.js",
