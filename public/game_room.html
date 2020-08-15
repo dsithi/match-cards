@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
@@ -17,7 +16,7 @@
     <h1 class="game-title"></h1>
     <div class="container">
         <div class="game-info">
-            <span class="time">Time 25</span>
+            <!-- <span class="time">Time 25</span> -->
             <span class="player-turn" id="turn"></span>
             <span class="title">Match Cards</span>
             <span class="room-name" id="roomName"></span>
@@ -109,18 +108,17 @@
                     <img class="back-card" src="icons\sausage.svg" draggable="false">
                 </div>
             </div>
-
         </div>
+
          <!-- Player Info -->
         <div class="player-info">
             <div class="info-grid"></div>
         </div>
         <div class="start-container">
             <button class="btns" id="rdy">Ready</button>
-            <button class="btns" id="quit">Surrender</button>
-            <button class="btns" id="leave">Leave Room</button>
-            <button class="btns" id="help">Credits</button>
+            <button class="btns" id="credits">Credits</button>
         </div>
+
         <!-- Chat -->
         <div class="chat-container">
             <div class="chat-box">
@@ -142,11 +140,25 @@
             </div>
         </div>
     </div>
+
+    <!-- Popup box -->
+    <div class="popup" id="popup">
+        <a href="#" class="close" id="close"></a>
+        <p>Created by: Domenic Sithimolada <a target="_blank" href="https://github.com/dsithi" style="color: white;">github.com/dsithi</a>
+            <br>
+            <br> Rabbit in Hat icon made by <a target="_blank" href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon"style="color: white;">www.flaticon.com</a>
+            <br>
+            <br> Food Icons made by <a target="_blank" href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon"style="color: white;">www.flaticon.com</a>
+            <br>
+            <br> Character Icons made by <a target="_blank" href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon"style="color: white;">www.flaticon.com</a>
+            <br>
+            <br> Cat Icon made by <a target="_blank" href="https://www.flaticon.com/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a> from <a target="_blank"href="https://www.flaticon.com/" title="Flaticon"style="color: white;">www.flaticon.com</a>
+        </p>
+    </div>
+
     <script src="game.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js"></script>
     <script src="/socket.io/socket.io.js"></script> 
     <script src="client.js"></script>
 </body>
 </html>
-
-

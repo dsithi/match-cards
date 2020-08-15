@@ -11,7 +11,6 @@ function playTurn() {
     });
 }
 
-
 function flipCard() {
     if (cardCount < 1) {
         this.classList.toggle('flipped', true);
@@ -47,6 +46,7 @@ function hideCards() {
 
 function flipBack(card) {
     document.getElementById(card).classList.toggle('flipped', false);
+    document.getElementById(card).classList.remove('noclick');
 }
 
 function countdownScreen() {
@@ -55,7 +55,6 @@ function countdownScreen() {
         if (count <= 0) {
             clearInterval(countdownTimer);
             countdownOff();
-            // Call game start function
         }
         else {
             document.getElementById('countdown').innerHTML = count;

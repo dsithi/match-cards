@@ -1,4 +1,3 @@
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -33,7 +32,6 @@ body {
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
-    /*font-family: 'Montserrat Subrayada', sans-serif;*/
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     background-color: #1b263b;
     border-top-left-radius: 5px;
@@ -80,7 +78,6 @@ body {
 
 }
 
-
 /* Game */
 .game-container {
     background-color: #1b263b;
@@ -103,6 +100,7 @@ body {
     min-height: 800px;
     perspective: 800px;
 }
+
 /* Change background color on flip !!*/
 .card {
     background-color: #415a77;
@@ -124,15 +122,13 @@ body {
 
 .card.hide {
     opacity: 0;
+    
+}
+
+.card.noclick {
     pointer-events: none;
 }
-/* 
-.card:hover {
-    cursor: pointer;
-    transform: scale(1);
-    border: 2px solid;
-    background-color: #2B7A78;
-} */
+
 .card .front-card {
     position: absolute;
     width: 125px;
@@ -173,6 +169,7 @@ body {
 .info {
     padding: 0;
 }
+
 .info-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -229,6 +226,7 @@ body {
     font-family: 'Work Sans', sans-serif;
 
 }
+
 .score-value{
     float: left;
     text-align: left;
@@ -237,6 +235,7 @@ body {
     font-family: 'Work Sans', sans-serif;
     margin-top: 4px;
 }
+
 .num{
     float: left;
     text-align: right;
@@ -244,7 +243,6 @@ body {
     color:white;
     font-family: 'Work Sans', sans-serif;
 }
-
 
 .start-container {
     background-color: #1b263b;
@@ -263,10 +261,7 @@ body {
     grid-row-start: 9;
     grid-row-end: 14;
     max-width: 575px;
-    
-    /*font-family: 'Libre Franklin', sans-serif; */
 }
-
 
 li {
     list-style: none;
@@ -313,10 +308,12 @@ li {
     display: flex;
     flex-wrap: wrap;
 }
+
 .message {
     background-color: #415a77;
-    border-radius: 3px;
-    padding: 10px 5px;
+    border-radius: 8px;
+    padding: 10px;
+    padding-bottom: 30px;
     display: block;
     max-width: auto;
     height: 38px;
@@ -324,7 +321,7 @@ li {
     margin-bottom: 15px;
     margin-top: 8px;
     overflow: hidden;
-    font-size: .5em;
+    font-size: .6em;
 }
 
 .msg-name {
@@ -347,6 +344,7 @@ li {
     color: #e0e1dd;
     font-family: 'Work Sans', sans-serif;
 }
+
 .chat-form-container {
     padding: 0 auto;
     max-height: 90px;
@@ -409,10 +407,12 @@ li {
     transform: scale(1);
     transition: .31s ease-out;
 }
+
 .btn:active, .btns:active {
     background-color: #778da9;
     transform: scale(0.9);
 }
+
 .btns {
     height: 55px;
     width: 100px;
@@ -426,6 +426,68 @@ li {
     color: #feffff;
 }
 
+/* Credits Popup */
+.popup {
+    background-color: #2A4465;
+    color: white;
+    height: 500px;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 520px;
+    border-radius: 2px;
+    visibility: hidden;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.12), 
+    0 2px 2px rgba(0,0,0,0.12), 
+    0 4px 4px rgba(0,0,0,0.12), 
+    0 8px 8px rgba(0,0,0,0.12),
+    0 16px 16px rgba(0,0,0,0.12);
+}
+
+.popup p {
+    margin-top: 55px;
+    padding: 60px 20px;
+    height: 70%;
+    font-size: 1.6em;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.popup a:visited {
+    text-decoration: none;
+}
+
+.popup a:link {
+    color: rgb(138, 139, 192);
+}
+
+.close {
+    position: absolute;
+    right: 32px;
+    top: 32px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.3;
+    background-color: white;
+  }
+  .close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+  }
+  .close:before {
+    transform: rotate(45deg);
+  }
+  .close:after {
+    transform: rotate(-45deg);
+  }
+  .close:hover {
+    opacity: 1;
+  }
+  
     
 /* Index */
 .index-container, .create-container, .join-container {
@@ -448,6 +510,7 @@ li {
     box-shadow: 0 20px 50px rgba(59, 43, 91, 0.4);
     user-select: none;
 }
+
 .index-container {
     width: 800px;
     min-width: 300px;
@@ -489,7 +552,6 @@ li {
     min-height: 70%;
     max-width: 100%;
  }
-
 
  .text {
     font-size: 2em;
