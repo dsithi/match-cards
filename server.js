@@ -10,7 +10,10 @@ const BOT = { name: 'MR CAT', src: 'animal.svg', color: '#3C3744' };
 
 // create express app, set port
 const app = express();
-const port = 5500;
+const port = process.env.PORT;
+if (port == null || port == "") {
+    port = 8000;
+}
 
 // create http server
 const server = http.createServer(app);
