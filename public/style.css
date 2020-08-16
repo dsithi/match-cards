@@ -914,8 +914,8 @@ li {
     .index-container {
         width: 350px;
         min-width: 300px;
-        height: 350px;
-        min-height: 300px;
+        height: 360px;
+        min-height: 350px;
     }
 
     .top {
