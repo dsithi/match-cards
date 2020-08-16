@@ -10,7 +10,7 @@ const BOT = { name: 'MR CAT', src: 'animal.svg', color: '#3C3744' };
 
 // create express app, set port
 const app = express();
-const port = process.env.PORT;
+let port = process.env.PORT;
 if (port == null || port == "") {
     port = 8000;
 }
@@ -274,10 +274,9 @@ io.on('connection', socket => {
                         io.to(user.roomID).emit('gameOver', winner);             
                     }
 
-                    else if (playerPoints.length === 2) {
-                        // Allow player turn
-                        io.to(user.id).emit('playerTurn', user);
-                    }
+                    // Allow player turn
+                    io.to(user.id).emit('playerTurn', user);
+
                 }
 
                 if (!match) {
